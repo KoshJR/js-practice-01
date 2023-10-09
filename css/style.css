@@ -1,0 +1,13 @@
+#root {
+  display: flex;
+}
+.leftDiv {
+  width: 40%;
+  background-color: bisque;
+  height: 100vh;
+}
+.rightDiv {
+  width: 60%;
+  background-color: beige;
+  height: 100vh;
+}
