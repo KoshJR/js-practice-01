@@ -1,6 +1,5 @@
-import { books } from "./data.js";
 import { createPrewievMarkup, createFormMarkup } from "./markupCreators.js";
-
+import { getBooks, setBooks } from "./utilities.js";
 const root = document.querySelector("#root");
 // console.log(root);
 
@@ -20,6 +19,7 @@ firstDiv.append(title, list, addButton);
 addButton.addEventListener("click", addBook);
 
 function renderList() {
+  const books = getBooks();
   const markup = books
     .map(({ id, title }) => {
       return `<li id='${id}'><p class='book-title'>${title}</p><button class='delete'>Delete</button><button class='edit'>Edit</button></li>`;
@@ -51,6 +51,7 @@ renderList();
 //  рендер розмітки
 
 function renderPrewiev(target) {
+  const books = getBooks();
   const bookTitle = target.textContent;
   const book = books.find(({ title }) => title === bookTitle);
   const markup = createPrewievMarkup(book);
@@ -64,7 +65,10 @@ function renderPrewiev(target) {
 
 function deleteBook(target) {
   const bookId = target.parentNode.id;
-  books = books.filter(({ id }) => bookId !== id);
+  const books = getBooks();
+  const updatedBooks = books.filter(({ id }) => bookId !== id);
+  setBooks(updatedBooks);
+
   renderList();
   const bookInfo = document.querySelector(".book-info");
   if (bookInfo && bookInfo.dataset.id === bookId) {
@@ -75,8 +79,9 @@ function deleteBook(target) {
 // додавання книжки
 
 function addBook() {
+  const books = getBooks();
   const newBook = {
-    id: Date.now(),
+    id: String(Date.now()),
     title: "",
     author: "",
     img: "",
@@ -90,6 +95,7 @@ function addBook() {
     event.preventDefault();
     // console.log(newBook);
     books.push(newBook);
+    setBooks(books);
     renderList();
     const markup = createPrewievMarkup(newBook);
     secondDiv.innerHTML = markup;
@@ -108,6 +114,7 @@ function fillObject(book) {
 }
 
 function editBook(target) {
+  const books = getBooks();
   const bookId = target.parentNode.id;
   const book = books.find(({ id }) => id === bookId);
   console.log(book);
@@ -122,6 +129,7 @@ function editBook(target) {
     const index = books.findIndex(({ id }) => id === bookId);
     // console.log(index);
     books[index] = book;
+    setBooks(books);
     renderList();
     const markup = createPrewievMarkup(book);
     secondDiv.innerHTML = markup;

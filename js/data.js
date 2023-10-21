@@ -1,4 +1,4 @@
-export let books = [
+let books = [
   {
     id: "1",
     title: `Apple. Computer evolution`,
@@ -38,3 +38,6 @@ export let books = [
        What tools does he need to use?`,
   },
 ];
+if (!localStorage.getItem("books")) {
+  localStorage.setItem("books", JSON.stringify(books));
+}
